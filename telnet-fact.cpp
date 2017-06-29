@@ -52,34 +52,46 @@ while(1)
       exit(3);
    }
 
-while(1)
+switch(fork())
 {
-   memset(buffer,0,sizeof(buffer));
-   bytes_read = recv(socket1, buffer, 512, 0);
-   if (bytes_read < 0) break;
-   bool correct=false;
-   for (int i = 0; i <= sizeof(buffer); i++)
+   case -1:
+      perror("fork");
+      break;
+   case 0:
    {
-      if((buffer[i] >='0')&&(buffer[i] <='9')) correct = true;
-   }
-   if (correct == false)
-   {
-       send(socket1,"Wrong input!\n",13,0);
-       continue;
-   }
 
-   int temp = strtol(buffer,NULL,10);
-
-   if (temp >= 0)
+   while(1)
    {
-      int fact = factor(temp);
-      char fact1[512];
-      memset(fact1,0,sizeof(fact1));
-      sprintf(fact1," %d", fact);
-      send(socket1,fact1,sizeof(fact1),0);
-      send(socket1,"\n",1,0);
+      memset(buffer,0,sizeof(buffer));
+      bytes_read = recv(socket1, buffer, 512, 0);
+      if (bytes_read < 0) break;
+      bool correct=false;
+      for (int i = 0; i <= sizeof(buffer); i++)
+      {
+          if((buffer[i] >='0')&&(buffer[i] <='9')) correct = true;
+      }
+      if (correct == false)
+      {
+          send(socket1,"Wrong input!\n",13,0);
+          continue;
+      }
+
+      int temp = strtol(buffer,NULL,10);
+
+      if (temp >= 0)
+      {
+         int fact = factor(temp);
+         char fact1[512];
+         memset(fact1,0,sizeof(fact1));
+         sprintf(fact1," %d", fact);
+         send(socket1,fact1,sizeof(fact1),0);
+         send(socket1,"\n",1,0);
+      }
+      else send(socket1, "Wrong input!\n", 13, 0);
    }
-   else send(socket1, "Wrong input!\n", 13, 0);
+   }
+   default:
+   close(socket1);
 }
 }
 return 0;

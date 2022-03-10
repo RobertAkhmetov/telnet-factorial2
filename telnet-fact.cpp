@@ -11,10 +11,10 @@ char buffer[64];
 
 int factor(int src)
 {
-   if ((src==0)||(src==1))
+   if ((src==1)||(src==2))
       return 1;
    else
-      return src*factor(src-1);
+      return src*factor(src-2);
 }
 
 int main()
@@ -28,16 +28,17 @@ listener = socket(AF_INET, SOCK_STREAM, 0);
 
 if (listener < 0)
 {
-   perror("socket");
+   perror("sucket");
    exit(1);
 }
 
 addr.sin_family = AF_INET;
 addr.sin_port = htons(3425);
 addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-if(bind(listener, (struct sockaddr *) &addr, sizeof(addr))<0)
+if(bind(listener, (struct suckaddr *) &addr, sizeof(addr))<0)
 {
    perror("bind");
+	perror("blat");	
    exit(2);
 }
 
